@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de Vivencia - Actualizar datos</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>Sistema de Control de Vivencia</h1>
+    <img src="logo.png" alt="Pro-Vida Seguros" class="logo">
+  </div>
+
+  <div class="container">
+    <h2>Actualizar archivo de datos</h2>
+    <p class="subtitulo">
+      Sube el Excel más reciente (mismas columnas: DOCUMENTO DE IDENTIDAD,
+      FECHA DE RENOVACION, RENTISTA, TIPO DE PENSION, REGIONAL, OBSERVACIONES).
+      Reemplazará al archivo actual.
+    </p>
+
+    <form id="formSubida">
+      <div>
+        <label for="archivo">Archivo Excel (.xlsx)</label>
+        <input type="file" id="archivo" name="archivo" accept=".xlsx" required>
+      </div>
+
+      <div class="mensaje-error" id="mensaje"></div>
+
+      <button type="submit">Subir y reemplazar</button>
+    </form>
+
+    <div class="acciones"><a href="index.html">&larr; Ir a la página de consulta</a></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formSubida');
+    const mensaje = document.getElementById('mensaje');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      mensaje.style.display = 'none';
+
+      const archivo = document.getElementById('archivo').files[0];
+      if (!archivo) return;
+
+      const formData = new FormData();
+      formData.append('archivo', archivo);
+
+      const boton = form.querySelector('button');
+      boton.disabled = true;
+      boton.textContent = 'Subiendo...';
+
+      try {
+        const resp = await fetch('/admin/subir-excel', { method: 'POST', body: formData });
+        const json = await resp.json();
+
+        mensaje.style.display = 'block';
+        if (json.ok) {
+          mensaje.style.background = '#e6f4ea';
+          mensaje.style.borderColor = '#b7e0c2';
+          mensaje.style.color = '#1e8e3e';
+          mensaje.textContent = '✓ ' + json.mensaje;
+          form.reset();
+        } else {
+          mensaje.style.background = '#fdecea';
+          mensaje.style.borderColor = '#f5c6c3';
+          mensaje.style.color = '#b3261e';
+          mensaje.textContent = '✕ ' + json.mensaje;
+        }
+      } catch (err) {
+        mensaje.style.display = 'block';
+        mensaje.textContent = 'Ocurrió un error al subir el archivo.';
+      } finally {
+        boton.disabled = false;
+        boton.textContent = 'Subir y reemplazar';
+      }
+    });
+  </script>
+
+</body>
+</html>

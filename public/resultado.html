@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de Vivencia - Resultado</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>Sistema de Control de Vivencia</h1>
+    <img src="logo.png" alt="Pro-Vida Seguros" class="logo">
+  </div>
+
+  <div class="container" id="contenedorResultado">
+    <div class="loader">Buscando datos...</div>
+  </div>
+
+  <script>
+    function obtenerParametro(nombre) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(nombre);
+    }
+
+    function escapar(texto) {
+      const div = document.createElement('div');
+      div.textContent = texto ?? '';
+      return div.innerHTML;
+    }
+
+    async function buscar() {
+      const ci = obtenerParametro('ci');
+      const contenedor = document.getElementById('contenedorResultado');
+
+      if (!ci) {
+        contenedor.innerHTML = `
+          <h2>Resultado de la búsqueda</h2>
+          <p class="estado-no-encontrado">No se especificó un documento de identidad.</p>
+          <div class="acciones"><a href="index.html">&larr; Volver a buscar</a></div>
+        `;
+        return;
+      }
+
+      try {
+        const resp = await fetch('/api/buscar?ci=' + encodeURIComponent(ci));
+        const json = await resp.json();
+
+        if (!json.ok) {
+          contenedor.innerHTML = `
+            <h2>Resultado de la búsqueda</h2>
+            <p class="estado-no-encontrado">✕ ${escapar(json.mensaje || 'No se encontró el registro.')}</p>
+            <div class="dato">
+              <span class="etiqueta">Documento consultado</span>
+              <span class="valor">${escapar(ci)}</span>
+            </div>
+            <div class="acciones"><a href="index.html">&larr; Realizar otra búsqueda</a></div>
+          `;
+          return;
+        }
+
+        const d = json.data;
+        contenedor.innerHTML = `
+          <h2>Resultado de la búsqueda</h2>
+          <p class="estado-encontrado">✓ Registro encontrado</p>
+          <div class="ficha">
+            <div class="dato">
+              <span class="etiqueta">Documento de identidad</span>
+              <span class="valor">${escapar(d.documento)}</span>
+            </div>
+            <div class="dato">
+              <span class="etiqueta">Fecha de renovación</span>
+              <span class="valor">${escapar(d.fechaRenovacion)}</span>
+            </div>
+            <div class="dato">
+              <span class="etiqueta">Estado</span>
+              <span class="valor">${escapar(d.estado) || '—'}</span>
+            </div>
+            <div class="dato">
+              <span class="etiqueta">Rentista</span>
+              <span class="valor">${escapar(d.rentista)}</span>
+            </div>
+            <div class="dato">
+              <span class="etiqueta">Tipo de pensión</span>
+              <span class="valor">${escapar(d.tipoPension)}</span>
+            </div>
+            <div class="dato">
+              <span class="etiqueta">Regional</span>
+              <span class="valor">${escapar(d.regional)}</span>
+            </div>
+            <div class="dato">
+              <span class="etiqueta">Referencia</span>
+              <span class="valor">${escapar(d.referencia) || '—'}</span>
+            </div>
+          </div>
+          <div class="acciones"><a href="index.html">&larr; Realizar otra búsqueda</a></div>
+        `;
+      } catch (err) {
+        contenedor.innerHTML = `
+          <h2>Resultado de la búsqueda</h2>
+          <p class="estado-no-encontrado">Ocurrió un error al consultar el servidor.</p>
+          <div class="acciones"><a href="index.html">&larr; Volver a buscar</a></div>
+        `;
+        console.error(err);
+      }
+    }
+
+    buscar();
+  </script>
+
+</body>
+</html>

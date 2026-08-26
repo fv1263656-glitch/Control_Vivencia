@@ -1,0 +1,189 @@
+:root {
+  --morado: #5b2a86;
+  --azul: #2196c9;
+  --gris-texto: #333333;
+  --fondo: #f4f6f9;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  color: var(--gris-texto);
+  background: var(--fondo);
+}
+
+/* ---------- Marca de agua de fondo ---------- */
+body::before {
+  content: "CONTROL DE VIVENCIA";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 7vw;
+  font-weight: 800;
+  color: rgba(91, 42, 134, 0.07);
+  white-space: nowrap;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- Encabezado con logo ---------- */
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.header h1 {
+  font-size: 1.3rem;
+  margin: 0;
+  color: var(--morado);
+  letter-spacing: 0.5px;
+}
+
+.header img.logo {
+  height: 48px;
+}
+
+/* ---------- Contenedor principal ---------- */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  margin: 6vh auto;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  padding: 40px 36px;
+}
+
+.container h2 {
+  color: var(--morado);
+  margin-top: 0;
+  text-align: center;
+}
+
+.subtitulo {
+  text-align: center;
+  color: #666;
+  margin-top: -8px;
+  margin-bottom: 28px;
+  font-size: 0.95rem;
+}
+
+/* ---------- Formulario ---------- */
+form { display: flex; flex-direction: column; gap: 18px; }
+
+label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--gris-texto);
+}
+
+input[type="text"] {
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: var(--azul);
+}
+
+button {
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, var(--morado), var(--azul));
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button:hover { opacity: 0.9; }
+
+.mensaje-error {
+  color: #b3261e;
+  background: #fdecea;
+  border: 1px solid #f5c6c3;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: none;
+}
+
+/* ---------- Resultado ---------- */
+.ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dato {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #f8f8fb;
+  border-left: 4px solid var(--azul);
+  border-radius: 6px;
+}
+
+.dato .etiqueta {
+  font-weight: 700;
+  color: var(--morado);
+  min-width: 170px;
+}
+
+.dato .valor {
+  text-align: right;
+  flex: 1;
+  word-break: break-word;
+}
+
+.estado-encontrado {
+  text-align: center;
+  font-weight: 700;
+  color: #1e8e3e;
+  margin-bottom: 6px;
+}
+
+.estado-no-encontrado {
+  text-align: center;
+  font-weight: 700;
+  color: #b3261e;
+  margin-bottom: 6px;
+}
+
+.acciones {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.acciones a {
+  color: var(--azul);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.acciones a:hover { text-decoration: underline; }
+
+.loader {
+  text-align: center;
+  color: #777;
+  padding: 20px 0;
+}
