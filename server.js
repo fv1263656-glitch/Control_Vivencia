@@ -97,6 +97,7 @@ function cargarDatos() {
       // El Excel puede traer la columna como "REFERENCIA" u "OBSERVACIONES"
       // según la versión; soportamos ambas.
       referencia: normalizado['REFERENCIA'] ?? normalizado['OBSERVACIONES'] ?? '',
+      presentar: normalizado['PRESENTAR'] ?? '',   
     };
   });
 }
